@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equalizer Effet</title>
+
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <aside class="aside">
+        <button type="button" class="clsSideList"></button>
+    </aside>
+    <div class="clsFlex">
+        <div>
+            <span class="clsMusicTitle">asfasf</span>
+        </div>
+    
+        <canvas class="clsCanvas"></canvas>
+        <div class="CurrentTime">
+            <input type="range" class="clsPlayCurrentTime" min="0" max="100" value="0" step="0.01">
+            <span class="clsPlayCurrentTimeSpan">00:00 | 00:00</span>
+        </div>
+        <div class="controls">
+            <audio src="./music/(No Copyright) Epicness Cinematic Dramatic Trailer.mp3" class="clsAudio"></audio>
+    
+            <button class="clsPlayButton">▶</button>           
+            <button class="clsStopButton">◼</button>
+    
+            <input type="range" class="clsPlayVolume" min="0" max="5" value="0.15" step="0.01">
+        </div>
+    </div>
+
+
+    <script type="module" src="./script.js"></script>
+    <script src="./bg.js"></script>
+    <script src="./music.js"></script>
+</body>
+</html>
