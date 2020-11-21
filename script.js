@@ -4,10 +4,18 @@ import {color_table} from "./COLOR_TABLE.js"; //html에서 script type을 module
 const clsPlayButton = document.querySelector(".clsPlayButton");
 const clsStopButton = document.querySelector(".clsStopButton");
 const clsPlayVolume = document.querySelector(".clsPlayVolume");
+const clsSideListButton = document.querySelector(".clsSideListButton");
+const clsSideListMenu = document.querySelector(".clsSideListMenu");
 const clsAudio = document.querySelector(".clsAudio");
 const clsMusicTitle = document.querySelector(".clsMusicTitle");
 const clsPlayCurrentTime = document.querySelector(".clsPlayCurrentTime");
+const clsClose = document.querySelector(".clsClose");
+const clsFlex = document.querySelector(".clsFlex");
+const clsLoadMusicFile = document.querySelector(".clsLoadMusicFile");
 const clsCanvas = document.querySelector(".clsCanvas");
+const clsMusicListInMenu = document.querySelector(".clsMusicListInMenu");
+const clsMusicList_ul = document.querySelector(".clsMusicList_ul");
+const idMusicListInMenu = document.getElementById("idMusicListInMenu");
 const CanvasContext = clsCanvas.getContext("2d");
 const clsPlayCurrentTimeSpan = document.querySelector(".clsPlayCurrentTimeSpan");
 const IntervalStep = 10;
@@ -58,7 +66,7 @@ const GetAudioAnalysisDataAtTime = setInterval(() => {
 function FrequencyEffect(index, array){
     CanvasContext.fillStyle = DefaultColors[index]; 
     CanvasContext.fillRect((clsCanvas.width/bufferLength)*index,clsCanvas.height,clsCanvas.width/bufferLength,-(array[index]/clsCanvas.height)*clsCanvas.height);     
-    CanvasContext.shadowBlur =40;
+    CanvasContext.shadowBlur = 40;
     CanvasContext.shadowColor = "#ffffff";
 }
 const DrawAudioFrequency = setInterval(() => {
@@ -110,15 +118,28 @@ const CreateAudioBuffer = setInterval(() => {
     }
 }, 1);
 
+function ActiveSideList(){
+    clsSideListMenu.style.right = "0px";
+    
+    
+}
+function  InactiveSideList(){
+    clsSideListMenu.style.right = "-500px";
+}
+function RemoveFileExt(FileName){
+    const FindExt = FileName.split('.');
+    // console.log(FindExt);
+    // const MusicExt = `.${FindExt[FindExt.length-1]}`;
+
+    // const RemoveExt = ExtractTitle[2].replace(MusicExt, ''); 
+    return FindExt[0]
+}
 function ExtractedMusicTitle(){
 
     const ExtractHTMLFromEle = audioSourceNode.mediaElement.outerHTML.split('"');
     const ExtractTitle = ExtractHTMLFromEle[1].split('/');
-    const FindExt = ExtractTitle[2].split('.');
-    const MusicExt = `.${FindExt[FindExt.length-1]}`;    
-    const RemoveExt = ExtractTitle[2].replace(MusicExt, ''); 
     
-    return RemoveExt;
+    return RemoveFileExt(ExtractTitle[2]);
 }
 function ClickPlayButton(event){    
     IsStopAudio
@@ -151,12 +172,70 @@ function InputCurrentTime(event){
     setInterval(GetCurrentTime, 1);
 
 }
+function ClickSideListButton(){
+    ActiveSideList();
+}
+function ClickLoadMusicFile(){
+    const FileNameArr = LoadMusicFile();
+}
+function processFile(file) {
+    var reader = new FileReader();
+    reader.onload = function () {
+        output.innerText = reader.result;
+    };
+    reader.readAsText(file, /* optional */ "euc-kr");
+}
+function DesignMusicList(li, span){
+    li.style.height = "50px";
+    li.style.width = "80%";
 
+
+    clsMusicList_ul.style.height = "50px";
+    clsMusicList_ul.style.width = "80%";
+    span.innerText = FileName;
+    li.appendChild(span);
+    clsMusicList_ul.appendChild(li);
+}
+function SetMusicListName(FileName){
+    // clsMusicList_ul
+    const li = document.createElement("li");
+    const span = document.createElement("span");
+    DesignMusicList(li, span);
+    // li.value = FileName;
+
+    const a = `${String(RemovePX(clsMusicListInMenu.style.height) + 100)}px`;
+    
+    clsMusicListInMenu.style.height = a;
+}
+function RemovePX(style){
+    return parseInt(style.replace('px',''));
+}
+function LoadMusicFile(){
+    const input = document.createElement("input");
+    let FileNameArr = new Array();
+    
+    input.type = "file";
+    input.accept = "mp3/plain"; // 확장자가 xxx, yyy 일때, ".xxx, .yyy"
+    input.multiple = true;
+    input.onchange = function (event) {
+        for(let i=0;i<event.target.files.length;i++){
+            // console.log(RemoveFileExt(event.target.files[i].name));
+            FileNameArr.push(RemoveFileExt(event.target.files[i].name));
+            SetMusicListName(FileNameArr[i]);
+        }
+    };
+    input.click();
+
+    return FileNameArr;
+}
 function EventListener(){
     clsPlayButton.addEventListener("click", ClickPlayButton);
     clsPlayVolume.addEventListener("input", InputPlayVolume);
     clsStopButton.addEventListener("click", ClickStopButton);
     clsPlayCurrentTime.addEventListener("input", InputCurrentTime);
+    clsSideListButton.addEventListener("click", ClickSideListButton);
+    clsClose.addEventListener("click",InactiveSideList);
+    clsLoadMusicFile.addEventListener("click",ClickLoadMusicFile);
 
 }
 

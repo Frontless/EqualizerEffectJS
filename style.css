@@ -90,23 +90,6 @@ input[type=range]{
     
 }
 
-.aside{
-    all:unset;
-    margin-top: 70px;
-    margin-left: 100px;
-    display: flex;
-    flex-direction: column;
-
-}
-.aside>.clsSideList{
-    width: 50px;
-    height: 50px;
-    border-radius: 25px;
-    background-color: #ecf0f1;
-    border: 3px solid #2c3e50;
-    box-shadow: 0 10px 200px rgba(0, 0, 0, 1), 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
 @keyframes fadeIn{
     from{
         opacity: 0;
@@ -124,4 +107,96 @@ input[type=range]{
     height: 100%;
     z-index: -1;
     animation: fadeIn .5s linear;
+}
+.aside{
+    all:unset;
+    margin-top: 70px;
+    margin-left: 1600px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+
+}
+.aside>.clsSideListButton{
+    all:unset;
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    background-color: #ecf0f1;
+    border: 3px solid #2c3e50;
+    box-shadow: 0 10px 200px rgba(0, 0, 0, 1), 0 1px 3px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+}
+.aside>.clsSideListButton:active{
+    transform:scale(0.98);
+}
+.clsSideListMenu {
+    background: #2c3e50;
+    bottom: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    right: -500px;
+    right: 0x;
+    top: 0;
+    width: 500px;
+    z-index: 1;
+    transition: all .5s ease-in-out;
+}
+.clsSideListMenu>.container{
+    display: flex;
+    flex-direction: column;
+    
+}
+.clsSideListMenu>.container>.header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 140px;
+}
+.clsSideListMenu>.container>.header>.clsSideListTitle{
+    display: flex;
+    color: #ecf0f1;
+    font-size: 25px;
+    font-weight: 700;
+    text-transform: uppercase;
+
+}
+.clsSideListMenu>.container>.header>.clsClose{
+    width: 33px;
+    height: 33px;
+    border-radius: 50px;
+    margin-top: 20px;
+    margin-left: 80%;
+    cursor: pointer;
+}
+.clsSideListMenu>.container>.header>.clsLoadMusicFile{
+    margin-left: 60%;
+    margin-top: 20px;
+    width: 70px;
+    height: 30px;
+}
+.clsSideListMenu>.container>.clsMusicListInMenu{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    color: #ecf0f1;
+    margin-top: 10px;
+    padding-right: 10%;
+    height: 100%;
+}
+
+.clsSideListMenu>.container>.clsMusicListInMenu>.container>ul>li{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;    
+    font-size: 22px;
+    width: 400px;
+    border: 1px solid;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.clsSideListMenu>.container>.clsMusicListInMenu>.container>ul>li:active{
+    transform:scale(0.98);
 }
