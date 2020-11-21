@@ -107,11 +107,12 @@ function CalMinSecPerDuration(Duration){
 const GetDuration = setInterval(() => {
     MaxDuration = audioSourceNode.mediaElement.duration;
     if(MaxDuration>0){
-        clsPlayCurrentTimeSpan.innerText = `00:00 | ${CalMinSecPerDuration(MaxDuration)}`;        
-        StopInterval(GetDuration);
+        //clsPlayCurrentTimeSpan.innerText = `00:00 | ${CalMinSecPerDuration(MaxDuration)}`;        
+        clsPlayCurrentTimeSpan.innerText = `${CalMinSecPerDuration(clsAudio.currentTime)} | ${CalMinSecPerDuration(MaxDuration)}`
+
         console.log("Found duration");
     }
-}, 1); 
+}, 100); 
 
 function ActiveSideList(){
     clsSideListMenu.style.right = "0px";
@@ -253,6 +254,7 @@ function ClickMusicList_li(event){
     // clsAudio.src = `${MusicRoot}${event.target.innerText}.mp3`
     console.log(`${event.target.innerText}`);
     clsAudio.src = `${event.target.innerText}`
+
     ClickStopButton();
     ClickPlayButton();
     ViewPlayingMusicTitle();
@@ -275,18 +277,23 @@ function GetCurrentTime(){
     clsPlayCurrentTime.value = (clsAudio.currentTime / MaxDuration) * 100;
 
     clsPlayCurrentTimeSpan.innerText = `${CalMinSecPerDuration(clsAudio.currentTime)} | ${CalMinSecPerDuration(MaxDuration)}`;
+
     //console.log(clsAudio.currentTime);
 }
 
 function StopInterval(Func){
     clearInterval(Func); 
+
 }
 function init(){
 
     clsAudio.play();
     gainNode.gain.value = clsPlayVolume.value;
     clsPlayCurrentTime.value = 0;
+
     setInterval(GetCurrentTime, 1);
+
+
     EventListener();
     ViewPlayingMusicTitle();
 }
