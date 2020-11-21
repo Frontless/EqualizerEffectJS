@@ -242,11 +242,18 @@ function LoadMusicFile(){
     // };
 
     //return FileNameArr;
-    for(let i=0; i<FileNameArr.length; i++){
-        RemoveFileExt(FileNameArr[i]);
-        SetMusicListName(FileNameArr[i], i);
-        document.getElementById(`idMusicList_li${i}`).addEventListener("click",ClickMusicList_li);
-    }    
+    while(clsMusicList_ul.hasChildNodes()){
+        clsMusicList_ul.removeChild(clsMusicList_ul.firstChild);
+    }
+    console.log(clsMusicList_ul.hasChildNodes());
+    if(!clsMusicList_ul.hasChildNodes()){
+        for(let i=0; i<FileNameArr.length; i++){
+            RemoveFileExt(FileNameArr[i]);
+            SetMusicListName(FileNameArr[i], i);
+            document.getElementById(`idMusicList_li${i}`).addEventListener("click",ClickMusicList_li);
+        }    
+    }
+    
     return FileNameArr;
 }
 function ClickMusicList_li(event){
