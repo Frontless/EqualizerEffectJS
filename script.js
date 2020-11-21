@@ -132,7 +132,7 @@ function RemoveFileExt(FileName){
 function ExtractedMusicTitle(){
 
     const ExtractHTMLFromEle = audioSourceNode.mediaElement.outerHTML.split('"');
-
+    console.log(ExtractHTMLFromEle);
     const ExtractTitle = ExtractHTMLFromEle[1].split('/');
     
     return RemoveFileExt(ExtractTitle[2]);
@@ -171,7 +171,15 @@ function InputCurrentTime(event){
 function ClickSideListButton(){
     ActiveSideList();
 }
+
+const FileNameArr = ["./music/(No Copyright) Epic Cinematic Dramatic Adventure Trailer.mp3",
+"./music/(No Copyright) Epicness Cinematic Dramatic Trailer.mp3",
+"./music/Nazar Rybak - The Epic Mind [Epic Orchestral Cinematic][MFY - No Copyright Music].mp3",
+"./music/Trailer Epic Action (Royalty Free Music Licensing).mp3"];
+
+
 function ClickLoadMusicFile(){
+
     LoadMusicFile();
 }
 function DesignMusicList(FileName, index){
@@ -204,31 +212,47 @@ function ClearMusicList(){
         clsMusicList_ul.removeChild(clsMusicList_ul.firstChild);
     }
 }
-function LoadMusicFile(){
-    const input = document.createElement("input");
-    let FileNameArr = new Array();
-    
-    input.type = "file";
-    input.accept = "mp3/plain"; // 확장자가 xxx, yyy 일때, ".xxx, .yyy"
-    input.multiple = true;
-    
-    input.click();
-    input.onchange = function (event) {
-        if(event.target.files.length>0){
-            ClearMusicList();
-            for(let i=0; i<event.target.files.length; i++){
-                FileNameArr.push(RemoveFileExt(event.target.files[i].name));
-                SetMusicListName(FileNameArr[i], i);
-                document.getElementById(`idMusicList_li${i}`).addEventListener("click",ClickMusicList_li);
-            }
-        }
-    };
+function UploadFileToLS(){
+    localStorage.setItem();
+}
 
+function LoadMusicFile(){
+    // const input = document.createElement("input");
+    // let FileNameArr = new Array();
+    
+    // input.type = "file";
+    // input.accept = "mp3/plain"; // 확장자가 xxx, yyy 일때, ".xxx, .yyy"
+    // input.multiple = true;
+    
+    // input.click();
+    // input.onchange = function (event) {
+        
+    //     if(event.target.files.length>0){
+    //         ClearMusicList();
+    //         for(let i=0; i<event.target.files.length; i++){
+    //             FileNameArr.push(RemoveFileExt(event.target.files[i].name));
+    //             SetMusicListName(FileNameArr[i], i);
+
+    //             //localStorage.setItem(FileNameArr[i],event.target.files[i]);
+
+    //             document.getElementById(`idMusicList_li${i}`).addEventListener("click",ClickMusicList_li);
+    //         }
+    //     }
+    // };
+
+    //return FileNameArr;
+    for(let i=0; i<FileNameArr.length; i++){
+        RemoveFileExt(FileNameArr[i]);
+        SetMusicListName(FileNameArr[i], i);
+        document.getElementById(`idMusicList_li${i}`).addEventListener("click",ClickMusicList_li);
+    }    
     return FileNameArr;
 }
 function ClickMusicList_li(event){
-    console.log(`${MusicRoot}${event.target.innerText}.mp3`);
-    clsAudio.src = `${MusicRoot}${event.target.innerText}.mp3`
+    // console.log(`${MusicRoot}${event.target.innerText}.mp3`);
+    // clsAudio.src = `${MusicRoot}${event.target.innerText}.mp3`
+    console.log(`${event.target.innerText}`);
+    clsAudio.src = `${event.target.innerText}`
     ClickStopButton();
     ClickPlayButton();
     ViewPlayingMusicTitle();
