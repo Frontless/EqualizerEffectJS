@@ -183,9 +183,10 @@ input[type=range]{
     align-items: flex-end;
     color: #ecf0f1;
     margin-top: 10px;
-    padding-right: 10%;
+    padding: 0 2%;
     height: 100%;
 }
+
 
 .clsSideListMenu>.container>.clsMusicListInMenu>.container>ul>li{
     display: flex;

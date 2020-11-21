@@ -18,10 +18,13 @@ const clsMusicList_ul = document.querySelector(".clsMusicList_ul");
 const idMusicListInMenu = document.getElementById("idMusicListInMenu");
 const CanvasContext = clsCanvas.getContext("2d");
 const clsPlayCurrentTimeSpan = document.querySelector(".clsPlayCurrentTimeSpan");
+
 const IntervalStep = 10;
 const SecPerMin = 60;
+const MUSICLIST_HEIGH = 50;
 const AnalyserFFTSize = 2048; // 32, 128 , 512 , 1024 최대 2048
 const DurationPerMin = "";
+const MusicRoot = "./music/";
 let IsStopAudio = false;
 let MaxDuration = 0;
 
@@ -77,7 +80,7 @@ const DrawAudioFrequency = setInterval(() => {
     
 }, IntervalStep);
 
-clsMusicTitle.innerText = `${ExtractedMusicTitle()}`;
+
 
 function CalMinSecPerDuration(Duration){
     let Min = "";
@@ -110,14 +113,6 @@ const GetDuration = setInterval(() => {
     }
 }, 1); 
 
-const CreateAudioBuffer = setInterval(() => {
-    if(MaxDuration>0){
-        const AudioBuffer = audioContext.createBuffer(audioDestination.channelCount,MaxDuration,audioContext.sampleRate);
-        StopInterval(CreateAudioBuffer);
-        console.log("Create audio buffer");
-    }
-}, 1);
-
 function ActiveSideList(){
     clsSideListMenu.style.right = "0px";
     
@@ -137,6 +132,7 @@ function RemoveFileExt(FileName){
 function ExtractedMusicTitle(){
 
     const ExtractHTMLFromEle = audioSourceNode.mediaElement.outerHTML.split('"');
+
     const ExtractTitle = ExtractHTMLFromEle[1].split('/');
     
     return RemoveFileExt(ExtractTitle[2]);
@@ -176,39 +172,37 @@ function ClickSideListButton(){
     ActiveSideList();
 }
 function ClickLoadMusicFile(){
-    const FileNameArr = LoadMusicFile();
+    LoadMusicFile();
 }
-function processFile(file) {
-    var reader = new FileReader();
-    reader.onload = function () {
-        output.innerText = reader.result;
-    };
-    reader.readAsText(file, /* optional */ "euc-kr");
-}
-function DesignMusicList(li, span){
-    li.style.height = "50px";
-    li.style.width = "80%";
+function DesignMusicList(FileName, index){
+    const li = document.createElement("li");
 
+    li.id = `idMusicList_li${index}`;
+    li.style.height = `${38}px`;
+    li.style.width = "98%";
+    li.style.border = "1px solid";
+    li.style.paddingTop = `${38/2}px`
+    li.style.textAlign = "center";
+    li.style.marginBottom = "5px";
+    li.style.cursor = "pointer";
+    li.innerHTML = FileName;
 
-    clsMusicList_ul.style.height = "50px";
-    clsMusicList_ul.style.width = "80%";
-    span.innerText = FileName;
-    li.appendChild(span);
+    clsMusicList_ul.style.height = `${MUSICLIST_HEIGH}px`;
+    clsMusicList_ul.style.width = "98%";
     clsMusicList_ul.appendChild(li);
 }
-function SetMusicListName(FileName){
-    // clsMusicList_ul
-    const li = document.createElement("li");
-    const span = document.createElement("span");
-    DesignMusicList(li, span);
-    // li.value = FileName;
-
-    const a = `${String(RemovePX(clsMusicListInMenu.style.height) + 100)}px`;
-    
+function SetMusicListName(FileName, index){
+    DesignMusicList(FileName, index);
+    const a = `${String(RemovePX(clsMusicListInMenu.style.height) + MUSICLIST_HEIGH)}px`;    
     clsMusicListInMenu.style.height = a;
 }
 function RemovePX(style){
     return parseInt(style.replace('px',''));
+}
+function ClearMusicList(){
+    while(clsMusicList_ul.hasChildNodes()){
+        clsMusicList_ul.removeChild(clsMusicList_ul.firstChild);
+    }
 }
 function LoadMusicFile(){
     const input = document.createElement("input");
@@ -217,16 +211,31 @@ function LoadMusicFile(){
     input.type = "file";
     input.accept = "mp3/plain"; // 확장자가 xxx, yyy 일때, ".xxx, .yyy"
     input.multiple = true;
+    
+    input.click();
     input.onchange = function (event) {
-        for(let i=0;i<event.target.files.length;i++){
-            // console.log(RemoveFileExt(event.target.files[i].name));
-            FileNameArr.push(RemoveFileExt(event.target.files[i].name));
-            SetMusicListName(FileNameArr[i]);
+        if(event.target.files.length>0){
+            ClearMusicList();
+            for(let i=0; i<event.target.files.length; i++){
+                FileNameArr.push(RemoveFileExt(event.target.files[i].name));
+                SetMusicListName(FileNameArr[i], i);
+                document.getElementById(`idMusicList_li${i}`).addEventListener("click",ClickMusicList_li);
+            }
         }
     };
-    input.click();
 
     return FileNameArr;
+}
+function ClickMusicList_li(event){
+    console.log(`${MusicRoot}${event.target.innerText}.mp3`);
+    clsAudio.src = `${MusicRoot}${event.target.innerText}.mp3`
+    ClickStopButton();
+    ClickPlayButton();
+    ViewPlayingMusicTitle();
+    
+}
+function ViewPlayingMusicTitle(){
+    clsMusicTitle.innerText = `${ExtractedMusicTitle()}`;
 }
 function EventListener(){
     clsPlayButton.addEventListener("click", ClickPlayButton);
@@ -236,7 +245,6 @@ function EventListener(){
     clsSideListButton.addEventListener("click", ClickSideListButton);
     clsClose.addEventListener("click",InactiveSideList);
     clsLoadMusicFile.addEventListener("click",ClickLoadMusicFile);
-
 }
 
 function GetCurrentTime(){
@@ -256,5 +264,6 @@ function init(){
     clsPlayCurrentTime.value = 0;
     setInterval(GetCurrentTime, 1);
     EventListener();
+    ViewPlayingMusicTitle();
 }
 init();
