@@ -112,7 +112,7 @@ const GetDuration = setInterval(() => {
 
         console.log("Found duration");
     }
-}, 100); 
+}, 10); 
 
 function ActiveSideList(){
     clsSideListMenu.style.right = "0px";
